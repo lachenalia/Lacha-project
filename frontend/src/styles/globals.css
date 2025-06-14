@@ -3,6 +3,15 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Main Color */
+  --primary: 14, 15, 92;
+  --secondary: #13d152;
+
+  /* Text Color */
+  --tx-main: #222;
+  --tx-sub: #666;
+  --tx-disable: #e5e5e5;
 }
 
 @theme inline {
@@ -26,11 +35,6 @@ body {
   display: flex;
   flex-direction: column;
   height: 100vh;
-}
-
-.header {
-  height: 70px;
-  background-color: pink;
 }
 
 .body-container {
