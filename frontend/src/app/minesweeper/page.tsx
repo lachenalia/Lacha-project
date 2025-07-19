@@ -1,4 +1,4 @@
-import SudokuBoard from "@/components/sudoku/SudokuBoard";
+import MineSweeperBoard from "@/components/minesweeper/MineSweeperBoard";
 import { Poppins } from "next/font/google";
 
 const poppins = Poppins({
@@ -11,7 +11,7 @@ export default function MineSweeperMain() {
   return (
     <main>
       <div className={`${poppins.className}`}>
-        <SudokuBoard />
+        <MineSweeperBoard />
       </div>
     </main>
   );
