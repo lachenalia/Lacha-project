@@ -3,8 +3,8 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 export function configSwagger(app: INestApplication) {
   const documentConf = new DocumentBuilder()
-    .setTitle('Pichu Project')
-    .setDescription('피츄는 172번이다.')
+    .setTitle('Lacha Project')
+    .setDescription("Lachenalia's First Project")
     .setVersion('0.9')
     .addBearerAuth()
     .build();

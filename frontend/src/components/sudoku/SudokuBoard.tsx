@@ -110,7 +110,7 @@ export default function SudokuBoard({}: Props) {
     if (checkGameEnd(gameBoard)) alert("게임이 끝났습니다!");
   }
 
-  const handleClick = async () => {
+  const getNewGame = async () => {
     try {
       const res = await fetch("http://localhost:3000/sudoku");
       if (!res.ok) throw new Error("API Call Fail");
@@ -124,7 +124,7 @@ export default function SudokuBoard({}: Props) {
   return (
     <div className={style.container}>
       <div className={style.gameInfo}>
-        <button onClick={handleClick}>Get New</button>
+        <button onClick={getNewGame}>새 게임</button>
         <p>난이도: 쉬움</p>
         <div className="flex">
           {life > 0 && <img src="/images/life.png" width={50} />}

@@ -5,20 +5,13 @@
   --foreground: #171717;
 
   /* Main Color */
-  --primary: 14, 15, 92;
-  --secondary: #13d152;
+  --primary: 102, 178, 153; /* #66B299 */
+  --secondary: 166, 216, 190; /* #A6D8BE */
 
   /* Text Color */
   --tx-main: #222;
   --tx-sub: #666;
   --tx-disable: #e5e5e5;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
