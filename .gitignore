@@ -1,0 +1,11 @@
+/node_modules
+
+# BE
+/backend/dist
+/backend/node_modules
+/backend/.env
+
+# FE
+/frontend/node_modules
+/frontend/.next
+/frontend/.env

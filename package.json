@@ -1,0 +1,12 @@
+{
+  "name": "lacha-project",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently -n FE,BE -c blue,green \"npm:dev:frontend\" \"npm:dev:backend\"",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && npm run start:dev"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0"
+  }
+}
