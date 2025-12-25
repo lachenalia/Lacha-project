@@ -1,10 +1,7 @@
-import { NextApiRequest, NextApiResponse } from "next";
-
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  const response = await fetch("http://localhost:3000/sudoku");
-  const data = await response.json();
-  res.status(200).json(data);
+export async function fetchSudoku() {
+  const res = await fetch("/api/sudoku");
+  if (!res.ok) throw new Error("API Call Fail");
+  return res.json();
 }
+
+export default fetchSudoku;

@@ -21,6 +21,16 @@
   }
 }
 
+html.light {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+html.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
@@ -37,5 +47,13 @@ body {
 
 .footer {
   height: 70px;
-  background-color: goldenrod;
+  background-color: rgba(var(--primary), 0.25);
+}
+
+html.light .footer {
+  background-color: rgba(var(--primary), 0.25);
+}
+
+html.dark .footer {
+  background-color: rgba(102, 178, 153, 0.5); /* #66B299 with 50% opacity */
 }

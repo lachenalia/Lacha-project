@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Poppins, Sour_Gummy } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "../styles/globals.css";
 import Header from "@/components/essential/Header";
 
@@ -14,18 +14,14 @@ const poppins = Poppins({
   variable: "--font-poppins",
 });
 
-const myFont = Sour_Gummy({
-  subsets: ["latin"],
-});
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko">
-      <body className={myFont.className}>
+    <html lang="ko" className="light">
+      <body className={poppins.className}>
         <Header />
         <div className="body-container">{children}</div>
         <div className="footer"></div>

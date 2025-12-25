@@ -112,7 +112,7 @@ export default function SudokuBoard({}: Props) {
 
   const getNewGame = async () => {
     try {
-      const res = await fetch("http://localhost:3000/sudoku");
+      const res = await fetch("/api/sudoku");
       if (!res.ok) throw new Error("API Call Fail");
       const resData = await res.json();
       setBoard(resData);

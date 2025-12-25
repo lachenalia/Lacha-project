@@ -1,21 +1,19 @@
-import SudokuBoard from "@/components/sudoku/SudokuBoard";
-
-export default function SudokuMain() {
+export default function MyPage() {
   return (
     <main className="min-h-full bg-gradient-to-b from-white to-emerald-50">
       <div className="mx-auto w-full max-w-5xl px-6 py-10">
         <div className="mb-6">
-          <p className="text-xs font-semibold text-emerald-700">Game</p>
+          <p className="text-xs font-semibold text-emerald-700">Account</p>
           <h1 className="mt-1 text-2xl font-bold tracking-tight text-slate-900">
-            스도쿠
+            MyPage
           </h1>
           <p className="mt-2 text-sm text-slate-600">
-            새 게임을 만들고, 실수 없이 끝까지 풀어보자.
+            개인 설정과 간단한 상태 정보를 모아둘 공간.
           </p>
         </div>
 
-        <div className="rounded-3xl border border-emerald-100 bg-white/80 p-4 shadow-sm backdrop-blur md:p-6">
-          <SudokuBoard />
+        <div className="rounded-3xl border border-emerald-100 bg-white/80 p-6 shadow-sm backdrop-blur">
+          <p className="text-sm text-slate-600">준비 중</p>
         </div>
       </div>
     </main>
