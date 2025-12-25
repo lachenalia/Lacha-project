@@ -1,17 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { UserGameInfo } from 'src/common/types/user-game-info.type';
-import { UserInfo } from 'src/common/types/user-info.type';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { User } from './user.entity';
 
 @Injectable()
 export class UsersService {
-  async getUser(username: string): Promise<UserInfo | null> {
-    // FIXME: 사용자 정보에 대한 더미 데이터
-    const sudokuGame = new UserGameInfo('sudoku');
-    const tapGame = new UserGameInfo('taptap');
-    return {
-      username: username,
-      password: 'string',
-      gameInfo: [sudokuGame, tapGame],
-    };
+  constructor(
+    @InjectRepository(User) private readonly usersRepo: Repository<User>,
+  ) {}
+
+  async getUser(email: string): Promise<User | null> {
+    const user = await this.usersRepo.findOne({
+      where: { email: email },
+    });
+    if (!user) return null;
+
+    return user
   }
 }
