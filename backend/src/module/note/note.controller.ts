@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, Query } from '@nestjs/common';
 import { UserId } from 'src/app/user.decorator';
 import { NoteDTO } from './dto/note.dto';
 import { NoteService } from './note.service';
+import { GetNotesDTO } from './dto/get-notes.dto';
 
 @Controller('note')
 export class NoteController {
@@ -13,8 +14,8 @@ export class NoteController {
   }
 
   @Get()
-  findAll(@UserId() userId: number) {
-    return this.noteService.findAll(userId);
+  findAll(@UserId() userId: number, @Query() query: GetNotesDTO) {
+    return this.noteService.findAll(userId, query);
   }
 
   @Get(':id')
