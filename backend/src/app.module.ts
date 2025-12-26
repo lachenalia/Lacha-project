@@ -8,7 +8,7 @@ import { ConfigModule } from '@nestjs/config';
 import { ConfigService } from '@nestjs/config';
 import { LoggerModule } from './common/logger/logger.module';
 import { TokenModule } from './app/token.module';
-import { MemoModule } from './module/memo/memo.module';
+import { NoteModule } from './module/note/note.module';
 import { TodoModule } from './module/todo/todo.module';
 import { HabitModule } from './module/habit/habit.module';
 import { GoalModule } from './module/goal/goal.module';
@@ -29,7 +29,7 @@ import { GoalModule } from './module/goal/goal.module';
     UsersModule,
     GamesModule,
     LoggerModule,
-    MemoModule,
+    NoteModule,
     TodoModule,
     HabitModule,
     GoalModule,

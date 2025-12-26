@@ -1,14 +1,15 @@
 import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
 import { UserId } from 'src/app/user.decorator';
 import { MemoService } from './memo.service';
+import { MemoDTO } from './dto/memo.dto';
 
 @Controller('memo')
 export class MemoController {
   constructor(private readonly memoService: MemoService) {}
 
   @Post()
-  create(@UserId() userId: number, @Body() body: any) {
-    return this.memoService.create(userId, body);
+  create(@UserId() userId: number, @Body() dto: MemoDTO) {
+    return this.memoService.create(userId, dto);
   }
 
   @Get()
@@ -22,7 +23,7 @@ export class MemoController {
   }
 
   @Put(':id')
-  update(@UserId() userId: number, @Param('id') id: string, @Body() body: any) {
+  update(@UserId() userId: number, @Param('id') id: string, @Body() body: MemoDTO) {
     return this.memoService.update(userId, +id, body);
   }
 

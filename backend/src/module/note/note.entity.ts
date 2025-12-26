@@ -9,23 +9,23 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { UserEntity } from '../users/user.entity';
-import { MemoCategoryEntity } from './memo-category.entity';
+import { NoteCategoryEntity } from './note-category.entity';
 
 @Entity()
-export class MemoEntity {
+export class NoteEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
   @ManyToOne(() => UserEntity)
-  @JoinColumn({ name: 'user_id' }) // Explicit is better for existing schema safety or if needed, but strategy should handle it. Strategy handles `relationName_referencedColumnName`. If relation is `user` and user entity key is `id`, it becomes `user_id`.
+  @JoinColumn({ name: 'user_id' })
   user!: UserEntity;
 
   @Column()
   userId!: number;
 
-  @ManyToOne(() => MemoCategoryEntity)
+  @ManyToOne(() => NoteCategoryEntity)
   @JoinColumn({ name: 'category_id' })
-  category!: MemoCategoryEntity;
+  category!: NoteCategoryEntity;
 
   @Column({ nullable: true })
   categoryId?: number | null;
