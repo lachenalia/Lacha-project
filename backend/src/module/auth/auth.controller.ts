@@ -1,4 +1,5 @@
 import { Body, Controller, HttpCode, Post } from '@nestjs/common';
+import { Public } from 'src/app/public.decorator';
 import { ApiTags } from '@nestjs/swagger';
 import { LoginRequestDTO } from './dto/login.dto';
 import { AuthService } from './auth.service';
@@ -9,6 +10,7 @@ import { CheckEmailDTO, SignUpDTO } from './dto/signup.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @Public()
   @Post('login')
   @HttpCode(200)
   async login(@Body() loginData: LoginRequestDTO) {
@@ -21,11 +23,13 @@ export class AuthController {
     return true;
   }
 
+  @Public()
   @Post('signup')
   async signUp(@Body() dto: SignUpDTO) {
     return this.authService.signUp(dto);
   }
 
+  @Public()
   @Post('check-email')
   @HttpCode(200)
   async checkEmail(@Body() dto: CheckEmailDTO) {

@@ -7,7 +7,12 @@ import { setAuth } from "@/lib/auth";
 import { apiPost } from "@/lib/api";
 
 type LoginResponse =
-  | { loginResult: true; userInfo: { email: string; name: string } }
+  | {
+      loginResult: true;
+      userInfo: { email: string; name: string; userId?: number };
+      token?: string;
+      tokenValidBefore?: string;
+    }
   | { loginResult: false; failCode?: number };
 
 export default function LoginPage() {
@@ -33,7 +38,11 @@ export default function LoginPage() {
         return;
       }
 
-      setAuth({ userInfo: data.userInfo });
+      setAuth({
+        userInfo: data.userInfo,
+        token: data.token,
+        tokenValidBefore: data.tokenValidBefore,
+      });
       router.replace("/");
     } catch {
       setError("로그인 실패");

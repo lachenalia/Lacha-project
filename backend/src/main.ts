@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { configSwagger } from './config/swagger.config';
 import { ConfigService } from '@nestjs/config';
+import { HttpExceptionFilter } from './app/exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -12,6 +13,7 @@ async function bootstrap() {
   });
 
   configSwagger(app);
+  app.useGlobalFilters(new HttpExceptionFilter());
 
   await app.listen(configService.get<number>('PORT') ?? 3000);
 }

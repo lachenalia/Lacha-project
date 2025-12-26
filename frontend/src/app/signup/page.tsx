@@ -9,7 +9,12 @@ import { apiPost } from "@/lib/api";
 type CheckEmailResponse = { available: boolean };
 type SignupResponse = { ok: boolean; message?: string };
 type LoginResponse =
-  | { loginResult: true; userInfo: { email: string; name: string } }
+  | {
+      loginResult: true;
+      userInfo: { email: string; name: string; userId?: number };
+      token?: string;
+      tokenValidBefore?: string;
+    }
   | { loginResult: false; failCode?: number };
 
 export default function SignupPage() {
@@ -111,7 +116,11 @@ export default function SignupPage() {
         return;
       }
 
-      setAuth({ userInfo: loginData.userInfo });
+      setAuth({
+        userInfo: loginData.userInfo,
+        token: loginData.token,
+        tokenValidBefore: loginData.tokenValidBefore,
+      });
       router.replace("/");
     } catch {
       setError("가입에 실패했어.");
