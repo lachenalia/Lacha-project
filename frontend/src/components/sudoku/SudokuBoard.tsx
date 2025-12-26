@@ -1,7 +1,8 @@
 "use client";
 
-import { JSX, useEffect, useMemo, useState } from "react";
+import { JSX, SetStateAction, useEffect, useState } from "react";
 import style from "./SudokuBoard.module.css";
+import { apiGet } from "@/lib/api";
 import { range } from "@/lib/utils";
 
 type Props = {};
@@ -79,7 +80,7 @@ export default function SudokuBoard({}: Props) {
     buttons.push(
       <div key={i} onClick={() => clickBtn(i)}>
         {i}
-      </div>
+      </div>,
     );
   }
 
@@ -112,10 +113,8 @@ export default function SudokuBoard({}: Props) {
 
   const getNewGame = async () => {
     try {
-      const res = await fetch("/api/sudoku");
-      if (!res.ok) throw new Error("API Call Fail");
-      const resData = await res.json();
-      setBoard(resData);
+      const data = await apiGet<number[][]>("/sudoku");
+      setBoard(data as SetStateAction<number[][]>);
     } catch (e: any) {
     } finally {
     }

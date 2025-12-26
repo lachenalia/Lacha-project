@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 
 @Entity({ name: 'users' })
-export class User {
+export class UserEntity {
   @PrimaryGeneratedColumn({ type: 'int' })
   id!: number;
 
@@ -21,7 +21,7 @@ export class User {
   name!: string;
 
   @Column({ type: 'varchar' })
-  status!: string;
+  status: string = 'active';
 
   @Column({ name: 'last_login_at', type: 'timestamptz', nullable: true })
   lastLoginAt?: Date | null;
