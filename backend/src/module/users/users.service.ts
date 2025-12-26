@@ -24,6 +24,16 @@ export class UsersService {
     return user;
   }
 
+  async getUserById(id: number): Promise<Omit<UserEntity, 'passwordHash'> | null> {
+    const user = await this.usersRepo.findOne({
+      where: { id },
+    });
+    if (!user) return null;
+
+    const { passwordHash, ...userWithoutPassword } = user;
+    return userWithoutPassword;
+  }
+
   async createUser(user: UserEntity) {
     await this.usersRepo.save(user);
   }

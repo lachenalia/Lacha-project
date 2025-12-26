@@ -1,3 +1,10 @@
+import { getAuthToken, isAuthTokenValid } from "@/lib/auth";
+
+const BE_URL =
+  (typeof window === "undefined"
+    ? (process.env.BE_URL ?? process.env.NEXT_PUBLIC_BE_URL)
+    : process.env.NEXT_PUBLIC_BE_URL) ?? "http://localhost:3000";
+
 export type ApiFetchOptions = {
   apiUrl: string;
   method?: string;
@@ -16,15 +23,6 @@ export class ApiRequestError<T = unknown> extends Error {
     this.status = status;
     this.data = data;
   }
-}
-
-const SERVER_BACKEND_BASE_URL = process.env.BE_URL ?? "http://localhost:3000";
-const PUBLIC_BACKEND_BASE_URL =
-  process.env.NEXT_PUBLIC_BE_URL ?? "http://localhost:3000";
-
-export function getBackendBaseUrl() {
-  if (typeof window === "undefined") return SERVER_BACKEND_BASE_URL;
-  return PUBLIC_BACKEND_BASE_URL;
 }
 
 function buildUrl(
@@ -48,12 +46,21 @@ export async function apiFetch<T = unknown>(
   options: ApiFetchOptions,
 ): Promise<{ res: Response; data: T }> {
   const method = options.method ?? (options.body ? "POST" : "GET");
-  const url = buildUrl(getBackendBaseUrl(), options.apiUrl, options.params);
+  const url = buildUrl(BE_URL, options.apiUrl, options.params);
+
+  const authHeader = (() => {
+    if (typeof window === "undefined") return undefined;
+    if (!isAuthTokenValid()) return undefined;
+    const token = getAuthToken();
+    if (!token) return undefined;
+    return `Bearer ${token}`;
+  })();
 
   const init: RequestInit = {
     method,
     cache: options.cache,
     headers: {
+      ...(authHeader ? { Authorization: authHeader } : {}),
       ...(options.body && !(options.body instanceof FormData)
         ? { "Content-Type": "application/json" }
         : {}),

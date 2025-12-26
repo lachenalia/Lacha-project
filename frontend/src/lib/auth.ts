@@ -1,10 +1,13 @@
 export type AuthUserInfo = {
+  userId?: number;
   email: string;
   name: string;
 };
 
 export type AuthState = {
   userInfo: AuthUserInfo;
+  token?: string;
+  tokenValidBefore?: string;
 };
 
 const AUTH_KEY = "lacha_auth";
@@ -27,4 +30,17 @@ export function setAuth(auth: AuthState) {
 
 export function clearAuth() {
   localStorage.removeItem(AUTH_KEY);
+}
+
+export function getAuthToken() {
+  return getAuth()?.token ?? null;
+}
+
+export function isAuthTokenValid() {
+  const auth = getAuth();
+  if (!auth?.token) return false;
+  if (!auth.tokenValidBefore) return true;
+  const validBefore = Date.parse(auth.tokenValidBefore);
+  if (Number.isNaN(validBefore)) return true;
+  return Date.now() < validBefore;
 }

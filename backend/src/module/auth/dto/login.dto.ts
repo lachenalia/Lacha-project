@@ -15,4 +15,6 @@ export class LoginResponseDTO {
   loginResult!: boolean;
   failCode?: number;
   userInfo?: any;
+  token?: string;
+  tokenValidBefore?: string;
 }

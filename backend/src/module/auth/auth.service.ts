@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { createHash, timingSafeEqual } from 'crypto';
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import { LoginRequestDTO, LoginResponseDTO } from './dto/login.dto';
 import { SignUpDTO } from './dto/signup.dto';
@@ -7,7 +9,12 @@ import { UserEntity } from '../users/user.entity';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
+  ) {}
+
   async login(loginData: LoginRequestDTO): Promise<LoginResponseDTO> {
     const user = await this.usersService.getUser(loginData.email);
     if (!user) {
@@ -28,12 +35,17 @@ export class AuthService {
 
     await this.usersService.updateLastLoginAt(user.id);
 
+    const { token, tokenValidBefore } = this.#createLoginToken(user.id);
+
     return {
       loginResult: true,
       userInfo: {
+        userId: user.id,
         email: user.email,
         name: user.name,
       },
+      token,
+      tokenValidBefore,
     };
   }
 
@@ -51,6 +63,17 @@ export class AuthService {
   async checkEmail(email: string) {
     const user = await this.usersService.getUser(email);
     return { available: !user };
+  }
+
+  #createLoginToken(userId: number) {
+    const expiresInSeconds = Number(
+      this.configService.get<string>('JWT_EXPIRES_IN_SECONDS') ?? 60 * 60,
+    );
+    const tokenValidBefore = new Date(
+      Date.now() + expiresInSeconds * 1000,
+    ).toISOString();
+    const token = this.jwtService.sign({ userId, tokenValidBefore });
+    return { token, tokenValidBefore };
   }
 
   #passwordHash(password: string) {
