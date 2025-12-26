@@ -5,12 +5,30 @@ import { range, shuffle } from 'src/common/utils';
 export class SudokuService {
   constructor() {}
 
-  getNewGame() {
-    const newGame = this.createNewBoard();
-    return newGame;
-    // TODO: create new game board
-    // TODO: remove few numbers by level
-    // TODO: return game board and answer
+  getNewGame(difficulty: string) {
+    const solution = this.createNewBoard();
+    const puzzle = solution.map((row) => [...row]); // Deep copy 1 depth
+    // Or full deep copy if safe: JSON.parse(JSON.stringify(solution))
+
+    let dropCount = 30;
+    if (difficulty === 'medium') dropCount = 40;
+    if (difficulty === 'hard') dropCount = 50;
+
+    this.#removeNumbers(puzzle, dropCount);
+
+    return { solution, puzzle };
+  }
+
+  #removeNumbers(board: number[][], count: number) {
+    let removed = 0;
+    while (removed < count) {
+      const r = Math.floor(Math.random() * 9);
+      const c = Math.floor(Math.random() * 9);
+      if (board[r][c] !== 0) {
+        board[r][c] = 0;
+        removed++;
+      }
+    }
   }
 
   createNewBoard() {
