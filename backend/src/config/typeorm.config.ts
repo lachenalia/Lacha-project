@@ -1,5 +1,6 @@
 import type { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import type { ConfigService } from '@nestjs/config';
+import { SnakeNamingStrategy } from './snake-naming.strategy';
 
 export function typeOrmConfig(
   configService: ConfigService,
@@ -9,6 +10,7 @@ export function typeOrmConfig(
     url: configService.get<string>('DATABASE_URL'),
     autoLoadEntities: true,
     synchronize: false,
+    namingStrategy: new SnakeNamingStrategy(),
   };
   return config;
 }
