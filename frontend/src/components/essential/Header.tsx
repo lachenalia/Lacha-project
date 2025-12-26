@@ -1,27 +1,54 @@
 "use client";
 
 import Link from "next/link";
-import { IconCalendarEvent, IconDeviceGamepad2, IconNotebook } from "@tabler/icons-react";
+import {
+  IconCalendarEvent,
+  IconDeviceGamepad2,
+  IconNotebook,
+} from "@tabler/icons-react";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { clearAuth, getAuth } from "@/lib/auth";
+import { apiPost } from "@/lib/api";
 
 export default function Header() {
   const pathname = usePathname();
+  const router = useRouter();
   const isActive = (href: string) => pathname === href;
-  const isActivePrefix = (prefix: string) => pathname === prefix || pathname.startsWith(prefix + "/");
+  const isActivePrefix = (prefix: string) =>
+    pathname === prefix || pathname.startsWith(prefix + "/");
   const [theme, setTheme] = useState<"light" | "dark">("light");
-  const [openMenu, setOpenMenu] = useState<"calendar" | "notes" | "games" | null>(null);
+  const [openMenu, setOpenMenu] = useState<
+    "calendar" | "notes" | "games" | null
+  >(null);
+  const [isAuthed, setIsAuthed] = useState(false);
 
   useEffect(() => {
-    const saved = (localStorage.getItem("theme") as "light" | "dark" | null) ?? "light";
+    const saved =
+      (localStorage.getItem("theme") as "light" | "dark" | null) ?? "light";
     setTheme(saved);
     document.documentElement.classList.toggle("dark", saved === "dark");
     document.documentElement.classList.toggle("light", saved === "light");
+
+    setIsAuthed(!!getAuth());
   }, []);
 
   useEffect(() => {
     setOpenMenu(null);
+    setIsAuthed(!!getAuth());
   }, [pathname]);
+
+  const logout = async () => {
+    clearAuth();
+    setIsAuthed(false);
+    try {
+      await apiPost("/auth/logout");
+    } catch {
+      // ignore
+    }
+    router.replace("/login");
+  };
 
   const toggleTheme = () => {
     setTheme((prev) => {
@@ -36,9 +63,22 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-emerald-100 bg-white/80 backdrop-blur dark:border-emerald-950/40 dark:bg-slate-950/70">
       <div className="mx-auto flex h-16 w-full max-w-5xl items-center justify-between gap-4 px-6">
-        <Link href="/" className="flex items-end gap-2 rounded-xl px-2 py-1 hover:bg-emerald-50 dark:hover:bg-emerald-950/30">
-          <img src="/images/lacha.png" alt="lacha-logo" width={44} height={44} />
-          <img src="/images/lacha-text.png" alt="lacha-text" width={110} height={28} />
+        <Link
+          href="/"
+          className="flex items-end gap-2 rounded-xl px-2 py-1 hover:bg-emerald-50 dark:hover:bg-emerald-950/30"
+        >
+          <img
+            src="/images/lacha.png"
+            alt="lacha-logo"
+            width={44}
+            height={44}
+          />
+          <img
+            src="/images/lacha-text.png"
+            alt="lacha-text"
+            width={110}
+            height={28}
+          />
         </Link>
 
         <nav className="flex flex-1 items-center justify-center gap-2">
@@ -60,7 +100,7 @@ export default function Header() {
             >
               <IconCalendarEvent size={20} />
             </button>
- 
+
             <div
               className={
                 (openMenu === "calendar"
@@ -83,7 +123,7 @@ export default function Header() {
               </Link>
             </div>
           </div>
- 
+
           <div
             className="relative"
             onMouseEnter={() => setOpenMenu("notes")}
@@ -102,7 +142,7 @@ export default function Header() {
             >
               <IconNotebook size={20} />
             </button>
- 
+
             <div
               className={
                 (openMenu === "notes"
@@ -137,7 +177,7 @@ export default function Header() {
               </Link>
             </div>
           </div>
- 
+
           <div
             className="relative"
             onMouseEnter={() => setOpenMenu("games")}
@@ -156,7 +196,7 @@ export default function Header() {
             >
               <IconDeviceGamepad2 size={20} />
             </button>
- 
+
             <div
               className={
                 (openMenu === "games"
@@ -211,6 +251,17 @@ export default function Header() {
           >
             MyPage
           </Link>
+
+          {isAuthed && (
+            <button
+              type="button"
+              onClick={logout}
+              className="rounded-xl border border-rose-200 bg-white px-3 py-2 text-sm font-semibold text-rose-700 shadow-sm transition hover:bg-rose-50 dark:border-rose-900/40 dark:bg-slate-950 dark:text-rose-200 dark:hover:bg-rose-950/30"
+              aria-label="Logout"
+            >
+              Logout
+            </button>
+          )}
         </div>
       </div>
     </header>

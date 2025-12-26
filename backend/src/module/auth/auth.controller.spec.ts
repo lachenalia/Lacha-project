@@ -16,7 +16,7 @@ describe('AuthController', () => {
   describe('login', () => {
     it('should return Login Result', () => {
       expect(
-        authController.login({ username: 'hnlee', password: 'password' }),
+        authController.login({ email: 'hnlee', password: 'password' }),
       ).toBe({ username: 'hnlee' });
     });
   });

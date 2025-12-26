@@ -1,15 +1,14 @@
 import type { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import type { ConfigService } from '@nestjs/config';
 
-export function typeOrmConfig(): TypeOrmModuleOptions {
-  return {
+export function typeOrmConfig(
+  configService: ConfigService,
+): TypeOrmModuleOptions {
+  const config: TypeOrmModuleOptions = {
     type: 'postgres',
-    url: process.env.DATABASE_URL,
-    host: process.env.DATABASE_URL ? undefined : process.env.PGHOST ?? 'localhost',
-    port: process.env.DATABASE_URL ? undefined : Number(process.env.PGPORT ?? 5432),
-    username: process.env.DATABASE_URL ? undefined : process.env.PGUSER,
-    password: process.env.DATABASE_URL ? undefined : process.env.PGPASSWORD,
-    database: process.env.DATABASE_URL ? undefined : process.env.PGDATABASE,
+    url: configService.get<string>('DATABASE_URL'),
     autoLoadEntities: true,
     synchronize: false,
   };
+  return config;
 }

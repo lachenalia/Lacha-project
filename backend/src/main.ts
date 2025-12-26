@@ -1,16 +1,18 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { configSwagger } from './config/swagger.config';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const configService = app.get(ConfigService); // 여기서 가져오기
 
   app.enableCors({
-    origin: 'http://localhost:3001',
+          origin: configService.get<string>('CORS_ORIGIN'),
   });
 
   configSwagger(app);
 
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(configService.get<number>('PORT') ?? 3000);
 }
 bootstrap();
