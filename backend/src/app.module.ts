@@ -8,6 +8,10 @@ import { ConfigModule } from '@nestjs/config';
 import { ConfigService } from '@nestjs/config';
 import { LoggerModule } from './common/logger/logger.module';
 import { TokenModule } from './app/token.module';
+import { MemoModule } from './module/memo/memo.module';
+import { TodoModule } from './module/todo/todo.module';
+import { HabitModule } from './module/habit/habit.module';
+import { GoalModule } from './module/goal/goal.module';
 
 @Module({
   imports: [
@@ -25,6 +29,10 @@ import { TokenModule } from './app/token.module';
     UsersModule,
     GamesModule,
     LoggerModule,
+    MemoModule,
+    TodoModule,
+    HabitModule,
+    GoalModule,
   ],
   controllers: [],
   providers: [],
