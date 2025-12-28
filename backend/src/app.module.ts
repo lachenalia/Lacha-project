@@ -13,6 +13,7 @@ import { TodoModule } from './module/todo/todo.module';
 import { HabitModule } from './module/habit/habit.module';
 import { GoalModule } from './module/goal/goal.module';
 import { CategoryModule } from './module/category/category.module';
+import { ScheduleModule } from './module/schedule/schedule.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { CategoryModule } from './module/category/category.module';
     HabitModule,
     GoalModule,
     CategoryModule,
+    ScheduleModule,
   ],
   controllers: [],
   providers: [],
