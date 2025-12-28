@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { apiDelete, apiGet, apiPost } from "@/lib/api";
 import Link from "next/link";
+import PageHeader from "@/components/essential/PageHeader";
 import { Category } from "@/type/category";
 import { Habit } from "@/type/habit";
 
@@ -120,16 +121,16 @@ export default function HabitPage() {
   return (
     <main className="min-h-full bg-gradient-to-b from-white to-emerald-50 dark:from-slate-950 dark:to-emerald-950/20">
       <div className="mx-auto w-full max-w-5xl px-6 py-10">
-        <div className="mb-8 items-end justify-between sm:flex">
-          <div>
-            <p className="text-xs font-semibold text-emerald-700 tracking-wider uppercase">Tool</p>
-            <h1 className="mt-1 text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">습관 형성</h1>
-            <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">지속 가능한 습관을 만들고 추적하세요.</p>
-          </div>
+        <PageHeader
+          label="Tool"
+          title="습관 형성"
+          description="지속 가능한 습관을 만들고 추적하세요."
+          settingHref="/settings/categories"
+        >
           <div className="mt-4 sm:mt-0 px-4 py-2 bg-white dark:bg-slate-900 rounded-2xl border border-emerald-100 dark:border-emerald-900/40 shadow-sm text-sm font-bold text-slate-700 dark:text-slate-300">
              오늘은 {today} 입니다
           </div>
-        </div>
+        </PageHeader>
 
         <div className="space-y-6">
           {/* Add Habit Form */}

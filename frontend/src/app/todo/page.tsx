@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { apiDelete, apiGet, apiPost, apiPut } from "@/lib/api";
 import Link from "next/link";
+import PageHeader from "@/components/essential/PageHeader";
 import { Category } from "@/type/category";
 import { Todo } from "@/type/todo";
 
@@ -119,11 +120,12 @@ export default function TodoPage() {
   return (
     <main className="min-h-full bg-gradient-to-b from-white to-emerald-50 dark:from-slate-950 dark:to-emerald-950/20">
       <div className="mx-auto w-full max-w-5xl px-6 py-10">
-        <div className="mb-8">
-          <p className="text-xs font-semibold text-emerald-700 tracking-wider uppercase">Tool</p>
-          <h1 className="mt-1 text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">To Do List</h1>
-          <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">오늘 해야 할 일을 깔끔하게 정리하기.</p>
-        </div>
+        <PageHeader
+          label="Tool"
+          title="To Do List"
+          description="오늘 해야 할 일을 깔끔하게 정리하기."
+          settingHref="/settings/categories"
+        />
 
         <div className="space-y-6">
           <div className="rounded-2xl border border-emerald-100 bg-white shadow-sm backdrop-blur dark:border-emerald-950/40 dark:bg-slate-900 overflow-hidden">

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import PageHeader from "@/components/essential/PageHeader";
 
 import { Category } from "@/type/category";
 import { Note, NoteListResponse } from "@/type/note";
@@ -67,63 +68,49 @@ export default function NotesPage() {
   return (
     <main className="min-h-full bg-gradient-to-b from-white to-emerald-50">
       <div className="mx-auto w-full max-w-5xl px-6 py-10">
-          <div className="flex items-end justify-between mb-6">
-            <div>
-              <p className="text-xs font-semibold text-emerald-700">Tool</p>
-              <div className="flex items-center gap-2">
-                <h1 className="mt-1 text-2xl font-bold tracking-tight text-slate-900">
-                  메모장
-                </h1>
-                <Link
-                  href="/settings/categories"
-                  className="mt-1 rounded-full p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5">
-                    <path fillRule="evenodd" d="M7.84 1.804A1 1 0 018.82 1h2.36a1 1 0 01.98.804l.331 1.652a6.993 6.993 0 011.929 1.115l1.598-.54a1 1 0 011.186.447l1.18 2.044a1 1 0 01-.205 1.251l-1.267 1.113a7.047 7.047 0 010 2.228l1.267 1.113a1 1 0 01.206 1.25l-1.18 2.045a1 1 0 01-1.187.447l-1.598-.54a6.993 6.993 0 01-1.929 1.115l-.33 1.652a1 1 0 01-.98.804H8.82a1 1 0 01-.98-.804l-.331-1.652a6.993 6.993 0 01-1.929-1.115l-1.598.54a1 1 0 01-1.186-.447l-1.18-2.044a1 1 0 01.205-1.251l1.267-1.114a7.05 7.05 0 010-2.227L1.821 7.773a1 1 0 01-.206-1.25l1.18-2.045a1 1 0 011.187-.447l1.598.54A6.993 6.993 0 017.51 3.456l.33-1.652zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
-                  </svg>
-                </Link>
-              </div>
-              <p className="mt-2 text-sm text-slate-600">
-                가볍게 기록하고, 나중에 다시 찾기 쉽게.
-              </p>
-            </div>
-            <div className="flex items-center gap-2 mb-1">
-              <button
-                onClick={() => setIsSearchOpen(!isSearchOpen)}
-                className={`rounded-full p-2 transition-colors ${
-                  isSearchOpen
-                    ? "bg-emerald-100 text-emerald-600"
-                    : "text-slate-400 hover:bg-slate-100 hover:text-slate-600"
-                }`}
+        <PageHeader
+          label="Tool"
+          title="메모장"
+          description="가볍게 기록하고, 나중에 다시 찾기 쉽게."
+          settingHref="/settings/categories"
+        >
+          <div className="flex items-center gap-2 mb-1">
+            <button
+              onClick={() => setIsSearchOpen(!isSearchOpen)}
+              className={`rounded-full p-2 transition-colors ${
+                isSearchOpen
+                  ? "bg-emerald-100 text-emerald-600"
+                  : "text-slate-400 hover:bg-slate-100 hover:text-slate-600"
+              }`}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                className="h-5 w-5"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  className="h-5 w-5"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </button>
-              <Link
-                href="/notes/new"
-                className="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-2 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+                <path
+                  fillRule="evenodd"
+                  d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </button>
+            <Link
+              href="/notes/new"
+              className="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-2 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                className="h-5 w-5"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  className="h-5 w-5"
-                >
-                  <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
-                </svg>
-              </Link>
-            </div>
+                <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+              </svg>
+            </Link>
           </div>
+        </PageHeader>
 
         {/* Search Panel */}
         {isSearchOpen && (
