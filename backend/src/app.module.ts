@@ -12,6 +12,7 @@ import { NoteModule } from './module/note/note.module';
 import { TodoModule } from './module/todo/todo.module';
 import { HabitModule } from './module/habit/habit.module';
 import { GoalModule } from './module/goal/goal.module';
+import { CategoryModule } from './module/category/category.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { GoalModule } from './module/goal/goal.module';
     TodoModule,
     HabitModule,
     GoalModule,
+    CategoryModule,
   ],
   controllers: [],
   providers: [],

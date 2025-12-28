@@ -5,17 +5,7 @@ import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { setAuth } from "@/lib/auth";
 import { apiPost } from "@/lib/api";
-
-type CheckEmailResponse = { available: boolean };
-type SignupResponse = { ok: boolean; message?: string };
-type LoginResponse =
-  | {
-      loginResult: true;
-      userInfo: { email: string; name: string; userId?: number };
-      token?: string;
-      tokenValidBefore?: string;
-    }
-  | { loginResult: false; failCode?: number };
+import { CheckEmailResponse, LoginResponse, SignupResponse } from "@/type/auth";
 
 export default function SignupPage() {
   const router = useRouter();

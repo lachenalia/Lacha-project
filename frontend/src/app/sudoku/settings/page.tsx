@@ -3,10 +3,11 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { SudokuSettings } from "@/type/sudoku";
 
 export default function SudokuSettingsPage() {
   const router = useRouter();
-  const [settings, setSettings] = useState({
+  const [settings, setSettings] = useState<SudokuSettings>({
     showRemaining: true,
     enableHints: false,
     useLive: true,

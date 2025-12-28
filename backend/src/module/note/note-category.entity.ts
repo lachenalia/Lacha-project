@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 import { UserEntity } from '../users/user.entity';
 
-@Entity()
+@Entity('note_categories')
 export class NoteCategoryEntity {
   @PrimaryGeneratedColumn()
   id!: number;

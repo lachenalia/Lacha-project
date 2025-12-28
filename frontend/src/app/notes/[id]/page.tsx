@@ -4,19 +4,8 @@ import { apiGet, apiPut, apiDelete } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, use } from "react";
 
-interface Note {
-  id: number;
-  title: string;
-  content: string;
-  createdAt: string;
-  updatedAt: string;
-  categoryId?: number | null;
-}
-
-interface Category {
-  id: number;
-  name: string;
-}
+import { Note } from "@/type/note";
+import { Category } from "@/type/category";
 
 export default function NoteDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -35,7 +24,7 @@ export default function NoteDetailPage({ params }: { params: Promise<{ id: strin
       try {
         const [noteData, categoriesData] = await Promise.all([
           apiGet<Note>(`/note/${id}`),
-          apiGet<Category[]>("/note-category")
+          apiGet<Category[]>("/categories")
         ]);
         setNote(noteData);
         setTitle(noteData.title);
@@ -141,7 +130,7 @@ export default function NoteDetailPage({ params }: { params: Promise<{ id: strin
                 <option value="">카테고리 선택 (없음)</option>
                 {categories.map((cat) => (
                   <option key={cat.id} value={cat.id}>
-                    {cat.name}
+                    {cat.icon} {cat.name}
                   </option>
                 ))}
               </select>

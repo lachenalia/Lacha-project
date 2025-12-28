@@ -135,7 +135,7 @@ export default function Header() {
               onFocus={() => setOpenMenu("notes")}
               className={
                 "flex h-10 w-10 items-center justify-center rounded-xl border text-slate-700 shadow-sm transition focus:outline-none focus:ring-2 focus:ring-emerald-400 " +
-                (isActivePrefix("/notes") || isActivePrefix("/todo")
+                (isActivePrefix("/notes") || isActivePrefix("/todo") || isActivePrefix("/habit")
                   ? "border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-900/40 dark:bg-emerald-950/30 dark:text-emerald-100"
                   : "border-slate-200 bg-white hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-100 dark:hover:bg-slate-900")
               }
@@ -174,6 +174,18 @@ export default function Header() {
                 }
               >
                 To Do
+              </Link>
+              <Link
+                href="/habit"
+                onClick={() => setOpenMenu(null)}
+                className={
+                  "block rounded-xl px-3 py-2 text-sm font-semibold transition " +
+                  (isActivePrefix("/habit")
+                    ? "bg-emerald-50 text-emerald-800 dark:bg-emerald-950/30 dark:text-emerald-100"
+                    : "text-slate-700 hover:bg-slate-50 dark:text-slate-100 dark:hover:bg-slate-900")
+                }
+              >
+                습관
               </Link>
             </div>
           </div>

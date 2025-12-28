@@ -8,6 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { UserEntity } from '../users/user.entity';
+import { CategoryEntity } from '../category/category.entity';
 
 @Entity({ name: 'todos' })
 export class TodoEntity {
@@ -28,7 +29,14 @@ export class TodoEntity {
   description?: string;
 
   @Column({ type: 'varchar', length: 50, nullable: true })
-  category?: string;
+  categoryName?: string;
+
+  @Column({ name: 'category_id', type: 'integer', nullable: true })
+  categoryId?: number;
+
+  @ManyToOne(() => CategoryEntity, { onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'category_id' })
+  category?: CategoryEntity;
 
   @Column({ type: 'smallint', default: 2 })
   importance: number = 2;

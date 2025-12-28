@@ -2,20 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { apiDelete, apiGet, apiPost, apiPut } from "@/lib/api";
-
-interface Todo {
-  id: number;
-  title: string;
-  description?: string;
-  category?: string;
-  importance: number;
-  isDone: boolean;
-  dueDate?: string;
-  completedAt?: string;
-}
+import Link from "next/link";
+import { Category } from "@/type/category";
+import { Todo } from "@/type/todo";
 
 export default function TodoPage() {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Form State
@@ -23,13 +16,17 @@ export default function TodoPage() {
   const [description, setDescription] = useState("");
   const [importance, setImportance] = useState(2);
   const [dueDate, setDueDate] = useState("");
-  const [category, setCategory] = useState("");
+  const [categoryId, setCategoryId] = useState<string>("");
   const [isDetailOpen, setIsDetailOpen] = useState(false);
 
   const fetchTodos = async () => {
     try {
-      const data = await apiGet<Todo[]>("/todo");
-      setTodos(data);
+      const [todosData, categoriesData] = await Promise.all([
+        apiGet<Todo[]>("/todo"),
+        apiGet<Category[]>("/categories")
+      ]);
+      setTodos(todosData);
+      setCategories(categoriesData);
     } catch (error) {
       console.error("Failed to fetch todos", error);
     } finally {
@@ -51,7 +48,7 @@ export default function TodoPage() {
         description: description.trim() || undefined,
         importance,
         dueDate: dueDate || undefined,
-        category: category.trim() || undefined,
+        categoryId: categoryId ? parseInt(categoryId) : undefined,
       });
       setTodos([added, ...todos]);
       
@@ -60,7 +57,7 @@ export default function TodoPage() {
       setDescription("");
       setImportance(2);
       setDueDate("");
-      setCategory("");
+      setCategoryId("");
       setIsDetailOpen(false);
     } catch (error) {
       console.error("Failed to add todo", error);
@@ -189,14 +186,20 @@ export default function TodoPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold text-slate-500 mb-1">카테고리</label>
-                      <input 
-                        type="text"
-                        placeholder="예: 업무, 운동"
-                        className="w-full bg-slate-50 dark:bg-slate-800/50 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-slate-100 outline-none placeholder:text-slate-400"
-                        value={category}
-                        onChange={(e) => setCategory(e.target.value)}
-                      />
+                      <label className="block text-xs font-semibold text-slate-500 mb-1 flex items-center justify-between">
+                        카테고리
+                        <Link href="/settings/categories" className="text-[10px] text-emerald-600 hover:underline">관리</Link>
+                      </label>
+                      <select 
+                        className="w-full bg-slate-50 dark:bg-slate-800/50 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-slate-100 outline-none appearance-none"
+                        value={categoryId}
+                        onChange={(e) => setCategoryId(e.target.value)}
+                      >
+                        <option value="">전체/없음</option>
+                        {categories.map(cat => (
+                          <option key={cat.id} value={cat.id}>{cat.icon} {cat.name}</option>
+                        ))}
+                      </select>
                     </div>
                   </div>
                 </div>
@@ -227,8 +230,12 @@ export default function TodoPage() {
                             <span className="text-sm font-medium text-slate-700 dark:text-slate-200">{todo.title}</span>
                             <div className={`h-1.5 w-1.5 rounded-full ${getImportanceColor(todo.importance)}`} title={`중요도: ${todo.importance}`} />
                             {todo.category && (
-                              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400 tracking-wider">
-                                {todo.category}
+                              <span 
+                                className="text-[10px] font-bold px-1.5 py-0.5 rounded tracking-wider flex items-center gap-1"
+                                style={{ backgroundColor: `${todo.category.color}20`, color: todo.category.color }}
+                              >
+                                <span>{todo.category.icon}</span>
+                                <span>{todo.category.name}</span>
                               </span>
                             )}
                           </div>

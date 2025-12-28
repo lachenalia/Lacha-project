@@ -9,9 +9,9 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { UserEntity } from '../users/user.entity';
-import { NoteCategoryEntity } from './note-category.entity';
+import { CategoryEntity } from '../category/category.entity';
 
-@Entity()
+@Entity('notes')
 export class NoteEntity {
   @PrimaryGeneratedColumn()
   id!: number;
@@ -23,9 +23,9 @@ export class NoteEntity {
   @Column()
   userId!: number;
 
-  @ManyToOne(() => NoteCategoryEntity)
+  @ManyToOne(() => CategoryEntity, { onDelete: 'SET NULL' })
   @JoinColumn({ name: 'category_id' })
-  category!: NoteCategoryEntity;
+  category!: CategoryEntity;
 
   @Column({ nullable: true })
   categoryId?: number | null;

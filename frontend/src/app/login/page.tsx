@@ -5,15 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { setAuth } from "@/lib/auth";
 import { apiPost } from "@/lib/api";
-
-type LoginResponse =
-  | {
-      loginResult: true;
-      userInfo: { email: string; name: string; userId?: number };
-      token?: string;
-      tokenValidBefore?: string;
-    }
-  | { loginResult: false; failCode?: number };
+import { LoginResponse } from "@/type/auth";
 
 export default function LoginPage() {
   const router = useRouter();

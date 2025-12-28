@@ -1,9 +1,24 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { range, shuffle } from 'src/common/utils';
+import { SudokuLogEntity } from './sudoku-log.entity';
+import { CreateSudokuLogDto } from './dto/sudoku-log.dto';
 
 @Injectable()
 export class SudokuService {
-  constructor() {}
+  constructor(
+    @InjectRepository(SudokuLogEntity)
+    private readonly logRepository: Repository<SudokuLogEntity>,
+  ) {}
+
+  async saveLog(userId: number, dto: CreateSudokuLogDto) {
+    const log = this.logRepository.create({
+      ...dto,
+      userId,
+    });
+    return await this.logRepository.save(log);
+  }
 
   getNewGame(difficulty: string) {
     const solution = this.createNewBoard();
@@ -35,7 +50,6 @@ export class SudokuService {
     const board = Array.from({ length: 9 }, () =>
       Array.from({ length: 9 }, () => 0),
     );
-    console.log(board);
     this.#solveBoard(board);
 
     return board;
@@ -48,7 +62,6 @@ export class SudokuService {
           const numbers = shuffle(range(1, 9));
           for (const n of numbers) {
             if (this.#isValid(board, r, c, n)) {
-              console.log(r, c, n);
               board[r][c] = n;
               if (this.#solveBoard(board)) return true;
               board[r][c] = 0;

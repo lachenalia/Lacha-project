@@ -6,20 +6,8 @@ import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-interface Category {
-  id: number;
-  name: string;
-  color: string;
-}
-
-interface Note {
-  id: number;
-  title: string;
-  content: string;
-  createdAt: string;
-  updatedAt: string;
-  category?: Category | null;
-}
+import { Category } from "@/type/category";
+import { Note, NoteListResponse } from "@/type/note";
 
 export default function NotesPage() {
   const [notes, setNotes] = useState<Note[]>([]);
@@ -47,7 +35,7 @@ export default function NotesPage() {
       const queryString = params.toString();
       const url = `/note${queryString ? `?${queryString}` : ""}`;
       
-      const data = await apiGet<{ list: Note[], count: number }>(url);
+      const data = await apiGet<NoteListResponse>(url);
       setNotes(data.list);
     } catch (error) {
       console.error("Failed to fetch notes", error);
@@ -58,7 +46,7 @@ export default function NotesPage() {
 
   useEffect(() => {
     fetchNotes();
-    apiGet<Category[]>("/note-category").then(setCategories).catch(console.error);
+    apiGet<Category[]>("/categories").then(setCategories).catch(console.error);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -87,7 +75,7 @@ export default function NotesPage() {
                   메모장
                 </h1>
                 <Link
-                  href="/notes/settings"
+                  href="/settings/categories"
                   className="mt-1 rounded-full p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-5 w-5">
@@ -202,6 +190,7 @@ export default function NotesPage() {
                           borderColor: filters.categoryIds.includes(cat.id) ? cat.color : undefined
                         }}
                       >
+                        {cat.icon && <span className="mr-1">{cat.icon}</span>}
                         {cat.name}
                       </button>
                     ))}
@@ -241,10 +230,12 @@ export default function NotesPage() {
                   <div className="mb-2 flex items-center gap-2">
                     {note.category && (
                       <div
-                        className="h-2.5 w-2.5 rounded-full ring-1 ring-white/50"
-                        style={{ backgroundColor: note.category.color }}
+                        className="flex h-6 w-6 items-center justify-center rounded-lg text-sm"
+                        style={{ backgroundColor: `${note.category.color}20`, color: note.category.color }}
                         title={note.category.name}
-                      />
+                      >
+                        {note.category.icon || "✨"}
+                      </div>
                     )}
                     <h3 className="line-clamp-1 text-lg font-semibold text-slate-800">
                       {note.title}

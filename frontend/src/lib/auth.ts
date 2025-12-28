@@ -1,14 +1,4 @@
-export type AuthUserInfo = {
-  userId?: number;
-  email: string;
-  name: string;
-};
-
-export type AuthState = {
-  userInfo: AuthUserInfo;
-  token?: string;
-  tokenValidBefore?: string;
-};
+import { AuthState } from "@/type/auth";
 
 const AUTH_KEY = "lacha_auth";
 

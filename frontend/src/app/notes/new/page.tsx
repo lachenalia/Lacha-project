@@ -3,11 +3,7 @@
 import { apiGet, apiPost } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-
-interface Category {
-  id: number;
-  name: string;
-}
+import { Category } from "@/type/category";
 
 export default function NewNotePage() {
   const router = useRouter();
@@ -18,7 +14,7 @@ export default function NewNotePage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    apiGet<Category[]>("/note-category").then(setCategories).catch(console.error);
+    apiGet<Category[]>("/categories").then(setCategories).catch(console.error);
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -73,7 +69,7 @@ export default function NewNotePage() {
                 <option value="">카테고리 선택 (없음)</option>
                 {categories.map((cat) => (
                   <option key={cat.id} value={cat.id}>
-                    {cat.name}
+                    {cat.icon} {cat.name}
                   </option>
                 ))}
               </select>

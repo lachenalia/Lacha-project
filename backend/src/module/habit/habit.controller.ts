@@ -1,19 +1,45 @@
-import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  Put,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { HabitService } from './habit.service';
 import { UserId } from 'src/app/user.decorator';
+import { CreateHabitDto, UpdateHabitDto } from './dto/habit.dto';
 
 @Controller('habit')
 export class HabitController {
   constructor(private readonly habitService: HabitService) {}
 
   @Post()
-  create(@UserId() userId: number, @Body() body: any) {
-    return this.habitService.create(userId, body);
+  create(@UserId() userId: number, @Body() dto: CreateHabitDto) {
+    return this.habitService.create(userId, dto);
   }
 
   @Get()
-  findAll(@UserId() userId: number) {
-    return this.habitService.findAll(userId);
+  findAll(@UserId() userId: number, @Query('date') date?: string) {
+    return this.habitService.findAll(userId, date);
+  }
+
+  @Post(':id/toggle')
+  toggleCompletion(
+    @UserId() userId: number,
+    @Param('id') id: string,
+    @Body('date') date: string,
+    @Body('note') note?: string,
+  ) {
+    return this.habitService.toggleCompletion(userId, +id, date, note);
+  }
+
+  @Get(':id/detail')
+  getHabitDetail(@UserId() userId: number, @Param('id') id: string) {
+    return this.habitService.getHabitDetail(userId, +id);
   }
 
   @Get(':id')
@@ -22,8 +48,12 @@ export class HabitController {
   }
 
   @Put(':id')
-  update(@UserId() userId: number, @Param('id') id: string, @Body() body: any) {
-    return this.habitService.update(userId, +id, body);
+  update(
+    @UserId() userId: number,
+    @Param('id') id: string,
+    @Body() dto: UpdateHabitDto,
+  ) {
+    return this.habitService.update(userId, +id, dto);
   }
 
   @Delete(':id')

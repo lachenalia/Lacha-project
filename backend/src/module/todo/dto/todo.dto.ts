@@ -12,7 +12,11 @@ export class CreateTodoDto {
   @IsOptional()
   @IsString()
   @MaxLength(50)
-  category?: string;
+  categoryName?: string;
+
+  @IsOptional()
+  @IsNumber()
+  categoryId?: number;
 
   @IsOptional()
   @IsNumber()
@@ -36,7 +40,11 @@ export class UpdateTodoDto {
   @IsOptional()
   @IsString()
   @MaxLength(50)
-  category?: string;
+  categoryName?: string;
+
+  @IsOptional()
+  @IsNumber()
+  categoryId?: number;
 
   @IsOptional()
   @IsNumber()

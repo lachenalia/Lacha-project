@@ -2,20 +2,12 @@
 
 import { JSX, SetStateAction, useEffect, useState } from "react";
 import style from "./SudokuBoard.module.css";
-import { apiGet } from "@/lib/api";
+import { apiGet, apiPost } from "@/lib/api";
 import { range } from "@/lib/utils";
 
 type Props = {};
 
-type CellStatus = "fixed" | "empty" | "correct" | "wrong";
-
-type Cell = {
-  row: number;
-  col: number;
-  answer: number;
-  inputValue?: number;
-  status: CellStatus;
-};
+import { Cell, CellStatus, SudokuSettings } from "@/type/sudoku";
 
 function checkGameEnd(gameBoard: Cell[][]) {
   for (const row of gameBoard) {
@@ -41,15 +33,16 @@ export default function SudokuBoard({}: Props) {
   const [gameBoard, setGameBoard] = useState<Cell[][] | null>(null);
   const [clicked, setClicked] = useState<Cell | null>(null);
   const [life, setLife] = useState<number>(3);
-  const [settings, setSettings] = useState({
+  const [settings, setSettings] = useState<SudokuSettings>({
     showRemaining: true,
     enableHints: false,
     useLive: true,
   });
 
   const [difficulty, setDifficulty] = useState("easy");
-
   const [elapsedTime, setElapsedTime] = useState(0);
+  const [isGameOver, setIsGameOver] = useState(false);
+  const [hintCount, setHintCount] = useState(0);
 
   useEffect(() => {
     const saved = localStorage.getItem("sudoku_settings");
@@ -83,6 +76,8 @@ export default function SudokuBoard({}: Props) {
       setLife(3);
       setClicked(null);
       setElapsedTime(0);
+      setIsGameOver(false);
+      setHintCount(0);
 
     } catch (e: any) {
       console.error(e);
@@ -97,23 +92,43 @@ export default function SudokuBoard({}: Props) {
   }, []);
 
   useEffect(() => {
-    if (!gameBoard) return;
+    if (!gameBoard || isGameOver) return;
     if (settings.useLive && life < 0) return;
-    // Also check if game completed? (Need state or check func)
-    // For now simple timer.
     
     const interval = setInterval(() => {
       setElapsedTime((prev) => prev + 1);
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [gameBoard, life, settings.useLive]);
+  }, [gameBoard, life, settings.useLive, isGameOver]);
+
+  const finishGame = async (success: boolean) => {
+    if (isGameOver) return;
+    setIsGameOver(true);
+
+    const diffMap: Record<string, number> = { easy: 0, medium: 1, hard: 2 };
+    const logData = {
+      difficulty: diffMap[difficulty] ?? 0,
+      result: success,
+      playTimeSec: elapsedTime,
+      useHint: hintCount,
+      lifeLost: 3 - Math.max(0, life),
+      attemptCount: 1,
+    };
+
+    try {
+      await apiPost("/sudoku/log", logData);
+    } catch (e) {
+      console.error("Failed to save sudoku log", e);
+    }
+  };
 
   useEffect(() => {
-    if (settings.useLive && life < 0) {
+    if (settings.useLive && life < 0 && !isGameOver) {
       alert("Game Over!");
+      finishGame(false);
     }
-  }, [life, settings.useLive]);
+  }, [life, settings.useLive, isGameOver]);
 
   const formatTime = (seconds: number) => {
     const m = Math.floor(seconds / 60);
@@ -139,10 +154,10 @@ export default function SudokuBoard({}: Props) {
     if (numberCounts[i] < 9) remainingTypes++;
   }
   const remainingCells = 81 - totalFilled;
-  const canAutoComplete = remainingCells > 0 && (remainingCells <= 5 || remainingTypes === 1);
+  const canAutoComplete = !isGameOver && remainingCells > 0 && (remainingCells <= 5 || remainingTypes === 1);
 
   const onAutoComplete = () => {
-    if (!gameBoard) return;
+    if (!gameBoard || isGameOver) return;
 
     const targets: { r: number; c: number }[] = [];
     gameBoard.forEach((row, r) => {
@@ -168,7 +183,10 @@ export default function SudokuBoard({}: Props) {
         });
 
         if (index === targets.length - 1) {
-          setTimeout(() => alert("게임이 끝났습니다!"), 100);
+          setTimeout(() => {
+            alert("게임이 끝났습니다!");
+            finishGame(true);
+          }, 100);
         }
       }, index * 500);
     });
@@ -212,15 +230,12 @@ export default function SudokuBoard({}: Props) {
   };
 
   function clickBtn(num: number) {
-    if (!gameBoard) return;
+    if (!gameBoard || isGameOver) return;
     if (!clicked) return;
     
-    // Allow clicking even if live < 0 if useLive is false (infinite mode), 
-    // but usually game over limits interaction. 
-    // If useLive is off, life can be anything.
-
     if (clicked.status == "fixed" || clicked.status == "correct") return;
 
+    let b: Cell[][] | null = null;
     setGameBoard((prev) => {
       if (!prev) return prev;
       const newBoard = prev.map((row) => [...row]);
@@ -233,24 +248,40 @@ export default function SudokuBoard({}: Props) {
           setLife(life - 1);
         }
       }
+      b = newBoard;
       return newBoard;
     });
 
-    if (checkGameEnd(gameBoard)) alert("게임이 끝났습니다!");
+    if (b && checkGameEnd(b)) {
+      setTimeout(() => {
+        alert("게임이 끝났습니다!");
+        finishGame(true);
+      }, 100);
+    }
   }
   
   const useHint = () => {
-    if (!clicked || !gameBoard) return;
+    if (!clicked || !gameBoard || isGameOver) return;
     if (clicked.status === "fixed" || clicked.status === "correct") return;
     
-    // Fill correct answer
+    setHintCount(prev => prev + 1);
+    
+    let b: Cell[][] | null = null;
     setGameBoard((prev) => {
       if (!prev) return prev;
       const newBoard = prev.map((row) => [...row]);
       newBoard[clicked.row][clicked.col].inputValue = clicked.answer;
       newBoard[clicked.row][clicked.col].status = "correct";
+      b = newBoard;
       return newBoard;
     });
+
+    if (b && checkGameEnd(b)) {
+      setTimeout(() => {
+        alert("게임이 끝났습니다!");
+        finishGame(true);
+      }, 100);
+    }
   };
 
   return (
