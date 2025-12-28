@@ -173,7 +173,7 @@ export default function Header() {
                     : "text-slate-700 hover:bg-slate-50 dark:text-slate-100 dark:hover:bg-slate-900")
                 }
               >
-                To Do List
+                To Do
               </Link>
             </div>
           </div>

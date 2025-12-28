@@ -1,14 +1,15 @@
 import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
 import { UserId } from 'src/app/user.decorator';
 import { TodoService } from './todo.service';
+import { CreateTodoDto, UpdateTodoDto } from './dto/todo.dto';
 
 @Controller('todo')
 export class TodoController {
   constructor(private readonly todoService: TodoService) {}
 
   @Post()
-  create(@UserId() userId: number, @Body() body: any) {
-    return this.todoService.create(userId, body);
+  create(@UserId() userId: number, @Body() dto: CreateTodoDto) {
+    return this.todoService.create(userId, dto);
   }
 
   @Get()
@@ -22,8 +23,12 @@ export class TodoController {
   }
 
   @Put(':id')
-  update(@UserId() userId: number, @Param('id') id: string, @Body() body: any) {
-    return this.todoService.update(userId, +id, body);
+  update(
+    @UserId() userId: number,
+    @Param('id') id: string,
+    @Body() dto: UpdateTodoDto,
+  ) {
+    return this.todoService.update(userId, +id, dto);
   }
 
   @Delete(':id')

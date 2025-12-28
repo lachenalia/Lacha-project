@@ -108,7 +108,7 @@ export default function Home() {
             >
               <div className="flex items-start justify-between">
                 <div>
-                  <h2 className="text-base font-semibold text-slate-900">To Do List</h2>
+                  <h2 className="text-base font-semibold text-slate-900">To Do</h2>
                   <p className="mt-1 text-sm text-slate-600">오늘 할 일 정리</p>
                 </div>
                 <span className="rounded-full bg-emerald-50 px-2 py-1 text-xs font-semibold text-emerald-700">
